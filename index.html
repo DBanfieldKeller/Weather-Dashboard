@@ -18,19 +18,37 @@
             <p class="lead">Your most trusted source for the weather, straight from the goat's mouth</p>
         </div>
     </div>
-    <main class="row">
+    <main class="row d-flex flex-nowrap">
         <aside>
+            <!-- location search function goes here -->
             <div class="list-group ml-3">
-                <!-- location search input goes here -->
-                <button type="button" class="list-group-item list-group-item-action">Cras justo odio</button>
-                <button type="button" class="list-group-item list-group-item-action">Dapibus ac facilisis in</button>
-                <button type="button" class="list-group-item list-group-item-action">Morbi leo risus</button>
-                <button type="button" class="list-group-item list-group-item-action">Porta ac consectetur ac</button>
-                <button type="button" class="list-group-item list-group-item-action">Vestibulum at eros</button>
+              
+                <button type="button" id="btnNYC" class="list-group-item list-group-item-action">Cras justo odio</button>
+                <button type="button" id="btnTokyo" class="list-group-item list-group-item-action">Dapibus ac facilisis in</button>
+                <button type="button" id="btnLondon" class="list-group-item list-group-item-action">Morbi leo risus</button>
+                <button type="button" id="btnRio" class="list-group-item list-group-item-action">Porta ac consectetur ac</button>
+                <button type="button" id="btnSydney"class="list-group-item list-group-item-action">Vestibulum at eros</button>
         </aside>
         <div class="container">
-            <div class="row">
-                <div class="card" style="width: 12rem;">
+            <div class="jumbotron jumbotron-fluid col-12">
+                <div class="container">
+                  <h1 class="display-4">Fluid jumbotron</h1>
+                  <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
+                </div>
+              </div>
+            <div class="row ml-1">
+                <div id="day1" class="card" style="width: 12rem;">
+                    <div class="card-header">
+                        Date
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Weather Icon</li>
+                        <li class="list-group-item">Temperature</li>
+                        <li class="list-group-item">Windspeed</li>
+                        <li class="list-group-item">Humidity</li>
+                    </ul>
+                </div>
+                <div id="day2" class="card" style="width: 12rem;">
                     <div class="card-header">
                         Featured
                     </div>
@@ -40,7 +58,7 @@
                         <li class="list-group-item">Vestibulum at eros</li>
                     </ul>
                 </div>
-                <div class="card" style="width: 12rem;">
+                <div id="day3" class="card" style="width: 12rem;">
                     <div class="card-header">
                         Featured
                     </div>
@@ -50,7 +68,7 @@
                         <li class="list-group-item">Vestibulum at eros</li>
                     </ul>
                 </div>
-                <div class="card" style="width: 12rem;">
+                <div id="day4" class="card" style="width: 12rem;">
                     <div class="card-header">
                         Featured
                     </div>
@@ -60,17 +78,7 @@
                         <li class="list-group-item">Vestibulum at eros</li>
                     </ul>
                 </div>
-                <div class="card" style="width: 12rem;">
-                    <div class="card-header">
-                        Featured
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Cras justo odio</li>
-                        <li class="list-group-item">Dapibus ac facilisis in</li>
-                        <li class="list-group-item">Vestibulum at eros</li>
-                    </ul>
-                </div>
-                <div class="card" style="width: 12rem;">
+                <div id="day5" class="card" style="width: 12rem;">
                     <div class="card-header">
                         Featured
                     </div>
