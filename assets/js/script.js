@@ -1,10 +1,11 @@
 // dependencies
-var day1= $('#day1')
-var day2= $('#day2')
-var day3= $('#day3')
-var day4= $('#day4')
-var day5= $('#day5')
+var day1= $('#day1');
+var day2= $('#day2');
+var day3= $('#day3');
+var day4= $('#day4');
+var day5= $('#day5');
 
+console.log(day1.children().eq(0).text())
 // DATA
 
 // functions
@@ -23,10 +24,16 @@ function getAPI() {
         })
         .then(function (data) {
             console.log(data);
-            console.log(data.list[0])
+            console.log(data.list[0].weather[0].icon)
+            day1.children().eq(1).children().eq(0).text(data.list[0].weather[0].icon)
+            day1.children().eq(1).children().eq(1).text(data.list[0].main.temp.toFixed() + ' °F')
+            day1.children().eq(1).children().eq(2).text(data.list[0].wind.speed + ' mph')
         })
 }
+// convert UTC unix stamp to local time??
+
 // write weather from API to each card
 
 getAPI()
 
+console.log(moment().format('LL'))
