@@ -22,7 +22,8 @@ function getAPI() {
             return response.json();
         })
         .then(function (data) {
-            console.log(data)
+            console.log(data);
+            console.log(data.list[0])
         })
 }
 // write weather from API to each card
