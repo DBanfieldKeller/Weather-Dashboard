@@ -21,18 +21,20 @@
     <main class="row d-flex flex-nowrap">
         <aside>
             <!-- location search function goes here -->
+            <div id="location-search" class= "ml-3">
+                <div class="ui-widget">
+                    <label class="ml-1" for="location">Search for a City</label>
+                    <input type="text" id="location" class="form-control" placeholder = "City Name">
+                </div>
+                <button type="submit" id="search-btn" class= "btn btn-primary">Search</button>
+            </div>
             <div class="list-group ml-3">
-
-                <button type="button" id="btnNYC" class="list-group-item list-group-item-action">Cras justo
-                    odio</button>
-                <button type="button" id="btnTokyo" class="list-group-item list-group-item-action">Dapibus ac facilisis
-                    in</button>
-                <button type="button" id="btnLondon" class="list-group-item list-group-item-action">Morbi leo
-                    risus</button>
-                <button type="button" id="btnRio" class="list-group-item list-group-item-action">Porta ac consectetur
-                    ac</button>
-                <button type="button" id="btnSydney" class="list-group-item list-group-item-action">Vestibulum at
-                    eros</button>
+                <button type="button" id="btnNYC" class="list-group-item list-group-item-action">New York City</button>
+                <button type="button" id="btnTokyo" class="list-group-item list-group-item-action">Tokyo</button>
+                <button type="button" id="btnLondon" class="list-group-item list-group-item-action">London</button>
+                <button type="button" id="btnRio" class="list-group-item list-group-item-action">Rio De Janeiro</button>
+                <button type="button" id="btnSydney" class="list-group-item list-group-item-action">Sydney</button>
+            </div>
         </aside>
         <div class="container">
             <div class="jumbotron jumbotron-fluid col-12">

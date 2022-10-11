@@ -9,8 +9,12 @@ var forecastIcon = $('.forecast-icon');
 var forecastTemp = $('.forecast-temp');
 var forecastWind = $('.forecast-wind');
 var forecastHumidity= $('.forecast-humidity')
+var locationInputEl = $('#location')
+var searchBtn = $('#search-btn');
 
-console.log(day1.children().eq(0).text())
+searchBtn.on('click', function() {
+    console.log(locationInputEl.val())
+})
 // DATA
 
 // functions
