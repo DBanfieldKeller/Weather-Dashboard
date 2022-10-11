@@ -91,7 +91,7 @@ function saveHistory(cityName) {
 function writeHistory() {
     var searchHistory= JSON.parse(localStorage.getItem("searches")) ?? [];
     for (var i=0; i < searchHistory.length; i++){
-        recentSearches.html($('<button type="button" id="btn1" class="list-group-item list-group-item-action">' + searchHistory[i] + '</button>'))
+        recentSearches.children().eq(i).replaceWith('<button type="button" id="btn'+ (i+1) + '" class="list-group-item list-group-item-action">' + searchHistory[i] + '</button>')
     }
 }
 
