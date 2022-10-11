@@ -72,7 +72,7 @@ console.log(latitude);
 
 
 function getAPI(cityName) {
-    var requestURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName+ "&units=imperial&appid=" + apiKey;
+    var requestURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + "&units=imperial&appid=" + apiKey;
 
     fetch(requestURL)
         .then(function (response) {
