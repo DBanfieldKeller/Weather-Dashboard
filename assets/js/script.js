@@ -22,7 +22,8 @@ console.log(day1.children().eq(0).text())
 
 function writeIcon(data) {
     for (var i=0; i < forecast.children().length; i++ ){
-        forecast.children().eq(i).children().eq(1).children().eq(0).text(data.list[7+(i*8)].weather[0].icon)
+        var iconCode = data.list[7+(i*8)].weather[0].icon
+        forecast.children().eq(i).children().eq(1).children().eq(0).attr("src", 'http://openweathermap.org/img/wn/'+ iconCode + '@2x.png')
     }
 }
 
@@ -43,7 +44,7 @@ function writeHumidity(data){
         forecast.children().eq(i).children().eq(1).children().eq(3).text(data.list[7+(i*8)].main.humidity +'%')
     }
 }
-// call API with provided coordinates
+// call API with provided coordinates and write data to cards
 function getAPI() {
     var requestURL= "https://api.openweathermap.org/data/2.5/forecast?lat=41.053429&lon=-73.538734&units=imperial&appid=b442f7cbd3dba47d0df28083d882bce6"
 
@@ -57,15 +58,12 @@ function getAPI() {
             writeTemp(data);
             writeWind(data);
             writeHumidity(data);
-
             return data
         })   
 }
 
 
 // convert UTC unix stamp to local time??
-
-// write weather from API to each card
 
 
 getAPI()
