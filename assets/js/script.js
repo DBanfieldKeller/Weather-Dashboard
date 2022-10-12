@@ -15,18 +15,21 @@ var recentSearches = $('#recent-searches');
 
 
 // DATA
-var latitude
-var longitude
 var apiKey = "b442f7cbd3dba47d0df28083d882bce6"
 // only save last 5 search results
 var historyLength = 5
 
 // functions
 
-// retrieve location data on form/button click
 
+// write dates for forecast
+function writeDates() {
+    for (var i=0; i < forecast.children().length; i++) {
+        forecast.children().eq(i).children().eq(0).text(moment().add((24*(i+1)), 'h').format('L'))
+    }
+}
 
-
+// write icon data from forecast API
 function writeIcon(data) {
     for (var i = 0; i < forecast.children().length; i++) {
         var iconCode = data.list[7 + (i * 8)].weather[0].icon
@@ -34,44 +37,26 @@ function writeIcon(data) {
     }
 }
 
+// write temperature data from forecast API
 function writeTemp(data) {
     for (var i = 0; i < forecast.children().length; i++) {
         forecast.children().eq(i).children().eq(1).children().eq(1).text(data.list[7 + (i * 8)].main.temp.toFixed() + '°F')
     }
 }
 
+// write windspeed from forecast API 
 function writeWind(data) {
     for (var i = 0; i < forecast.children().length; i++) {
         forecast.children().eq(i).children().eq(1).children().eq(2).text(data.list[7 + (i * 8)].wind.speed + 'mph')
     }
 }
-
+// write Humidity from forecast API
 function writeHumidity(data) {
     for (var i = 0; i < forecast.children().length; i++) {
         forecast.children().eq(i).children().eq(1).children().eq(3).text(data.list[7 + (i * 8)].main.humidity + '%')
     }
 }
 // call API with provided coordinates and write data to cards
-
-// function getCoordinatesAPI() {
-//     var requestURL = "http://api.openweathermap.org/geo/1.0/direct?q=greenwich&limit=1&appid=" + apiKey;
-
-//     fetch(requestURL)
-//         .then(function (response) {
-//             return response.json();
-//         })
-//         .then(function (data) {
-//             console.log(data)
-//             latitude = data[0].lat;
-//             console.log(latitude);
-//             longitude = data[0].lon;
-//             return latitude
-//         })
-// }
-
-// getCoordinatesAPI();
-
-// console.log(latitude);
 
 // write recent searches to history
 
@@ -95,7 +80,7 @@ function writeHistory() {
     }
 }
 
-function getAPI(cityName) {
+function getAPIForecast(cityName) {
     var requestURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + "&units=imperial&appid=" + apiKey;
 
     fetch(requestURL)
@@ -107,6 +92,7 @@ function getAPI(cityName) {
             if (data.cod === '404') {
                 alert('Invalid City Name')
             } else {
+                writeDates();
                 writeIcon(data);
                 writeTemp(data);
                 writeWind(data);
@@ -117,11 +103,22 @@ function getAPI(cityName) {
         })
 }
 
+function getAPICurrent(cityName){
+    var requestURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&units=imperial&appid=" + apiKey;
+    fetch(requestURL)
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function (data) {
+        console.log(data);
+    })
+}
 
 searchBtn.on('click', function () {
     console.log(locationInputEl.val());
     var cityName = locationInputEl.val();
-    getAPI(cityName);
+    getAPIForecast(cityName);
+    getAPICurrent(cityName);
     writeHistory();
     console.log(JSON.parse(localStorage.getItem("searches")))
 })
@@ -129,7 +126,7 @@ searchBtn.on('click', function () {
 // convert UTC unix stamp to local time??
 
 
-
+writeHistory();
 
 
 
