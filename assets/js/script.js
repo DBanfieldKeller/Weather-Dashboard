@@ -1,9 +1,5 @@
 // dependencies
 var forecast = $('#forecast')
-var forecastIcon = $('.forecast-icon');
-var forecastTemp = $('.forecast-temp');
-var forecastWind = $('.forecast-wind');
-var forecastHumidity = $('.forecast-humidity')
 var locationInputEl = $('#location')
 var searchBtn = $('#search-btn');
 var recentSearches = $('#recent-searches');
@@ -113,10 +109,11 @@ function getAPIForecast(cityName) {
             return response.json();
         })
         .then(function (data) {
-            console.log(data);
+            // console.log(data);
             if (data.cod === '404') {
                 alert('Invalid City Name')
             } else {
+                // console.log(data)
                 writeDates();
                 writeIcon(data);
                 writeTemp(data);
@@ -138,7 +135,7 @@ function getAPICurrent(cityName) {
             return response.json();
         })
         .then(function (data) {
-            console.log(data);
+            // console.log(data);
             if (data.cod === '404') {
                 return
             } else {
@@ -154,7 +151,6 @@ function getAPICurrent(cityName) {
 // press button to produce weather items
 
 searchBtn.on('click', function () {
-    console.log(locationInputEl.val());
     var cityName = locationInputEl.val();
     getAPIForecast(cityName);
     getAPICurrent(cityName);
