@@ -1,9 +1,4 @@
 // dependencies
-var day1 = $('#day1');
-var day2 = $('#day2');
-var day3 = $('#day3');
-var day4 = $('#day4');
-var day5 = $('#day5');
 var forecast = $('#forecast')
 var forecastIcon = $('.forecast-icon');
 var forecastTemp = $('.forecast-temp');
@@ -24,8 +19,8 @@ var historyLength = 5
 
 // write dates for forecast
 function writeDates() {
-    for (var i=0; i < forecast.children().length; i++) {
-        forecast.children().eq(i).children().eq(0).text(moment().add((24*(i+1)), 'h').format('L'))
+    for (var i = 0; i < forecast.children().length; i++) {
+        forecast.children().eq(i).children().eq(0).text(moment().add((24 * (i + 1)), 'h').format('L'))
     }
 }
 
@@ -40,45 +35,75 @@ function writeIcon(data) {
 // write temperature data from forecast API
 function writeTemp(data) {
     for (var i = 0; i < forecast.children().length; i++) {
-        forecast.children().eq(i).children().eq(1).children().eq(1).text(data.list[7 + (i * 8)].main.temp.toFixed() + '°F')
+        forecast.children().eq(i).children().eq(1).children().eq(1).text(data.list[7 + (i * 8)].main.temp.toFixed() + '°F');
     }
 }
 
 // write windspeed from forecast API 
 function writeWind(data) {
     for (var i = 0; i < forecast.children().length; i++) {
-        forecast.children().eq(i).children().eq(1).children().eq(2).text(data.list[7 + (i * 8)].wind.speed + 'mph')
+        forecast.children().eq(i).children().eq(1).children().eq(2).text(data.list[7 + (i * 8)].wind.speed + 'mph');
     }
 }
 // write Humidity from forecast API
 function writeHumidity(data) {
     for (var i = 0; i < forecast.children().length; i++) {
-        forecast.children().eq(i).children().eq(1).children().eq(3).text(data.list[7 + (i * 8)].main.humidity + '%')
+        forecast.children().eq(i).children().eq(1).children().eq(3).text(data.list[7 + (i * 8)].main.humidity + '%');
     }
 }
-// call API with provided coordinates and write data to cards
+
+// write current date and city
+function currentHeader(cityName) {
+    $('#current-header').text(cityName + "  " + moment().format('LL'));
+}
+
+// write current icon
+function currentIcon(data) {
+    var iconCode = data.weather[0].icon
+    $('#current-icon').attr("src", 'http://openweathermap.org/img/wn/' + iconCode + '@2x.png')
+}
+
+// write current temperature
+
+function currentTemp(data) {
+    $('#current-temp').text(data.main.temp.toFixed() + '°F');
+}
+
+// write current windspeed
+
+function currentWind(data) {
+    $('#current-wind').text('Wind ' + data.wind.speed + 'mph')
+}
+
+// write current humdity
+
+function currentHumidity(data) {
+    $('#current-humidity').text(data.main.humidity + '%')
+}
 
 // write recent searches to history
 
 function saveHistory(cityName) {
-    var searchHistory= JSON.parse(localStorage.getItem("searches")) ?? [];
+    var searchHistory = JSON.parse(localStorage.getItem("searches")) ?? [];
     // add item to history array
     searchHistory.unshift(cityName);
     // remove oldest item from history array
     searchHistory.splice(historyLength);
     // save new array
-    localStorage.setItem("searches",JSON.stringify(searchHistory));
+    localStorage.setItem("searches", JSON.stringify(searchHistory));
 
 }
 
 // write search history to buttons
 
 function writeHistory() {
-    var searchHistory= JSON.parse(localStorage.getItem("searches")) ?? [];
-    for (var i=0; i < searchHistory.length; i++){
-        recentSearches.children().eq(i).replaceWith('<button type="button" id="btn'+ (i+1) + '" class="list-group-item list-group-item-action">' + searchHistory[i] + '</button>')
+    var searchHistory = JSON.parse(localStorage.getItem("searches")) ?? [];
+    for (var i = 0; i < searchHistory.length; i++) {
+        recentSearches.children().eq(i).replaceWith('<button type="button" id="btn' + (i + 1) + '" class="list-group-item list-group-item-action">' + searchHistory[i] + '</button>')
     }
 }
+
+// get forecast API and write data to each card, update history
 
 function getAPIForecast(cityName) {
     var requestURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + "&units=imperial&appid=" + apiKey;
@@ -97,35 +122,46 @@ function getAPIForecast(cityName) {
                 writeTemp(data);
                 writeWind(data);
                 writeHumidity(data);
-                saveHistory(cityName)
+                saveHistory(cityName);
+                writeHistory()
                 return data
             }
         })
 }
 
-function getAPICurrent(cityName){
+// get current weather API and write data to jumbotron
+
+function getAPICurrent(cityName) {
     var requestURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&units=imperial&appid=" + apiKey;
     fetch(requestURL)
-    .then(function (response) {
-        return response.json();
-    })
-    .then(function (data) {
-        console.log(data);
-    })
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            console.log(data);
+            if (data.cod === '404') {
+                return
+            } else {
+                currentHeader(cityName);
+                currentIcon(data);
+                currentTemp(data);
+                currentWind(data);
+                currentHumidity(data);
+            }
+        })
 }
+
+// press button to produce weather items
 
 searchBtn.on('click', function () {
     console.log(locationInputEl.val());
     var cityName = locationInputEl.val();
     getAPIForecast(cityName);
     getAPICurrent(cityName);
-    writeHistory();
     console.log(JSON.parse(localStorage.getItem("searches")))
 })
 
-// convert UTC unix stamp to local time??
-
-
+// write history to buttons on page opening
 writeHistory();
 
 
