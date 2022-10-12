@@ -11,19 +11,25 @@ var forecastWind = $('.forecast-wind');
 var forecastHumidity = $('.forecast-humidity')
 var locationInputEl = $('#location')
 var searchBtn = $('#search-btn');
+var recentSearches = $('#recent-searches');
 
 
 // DATA
-var latitude
-var longitude
 var apiKey = "b442f7cbd3dba47d0df28083d882bce6"
+// only save last 5 search results
+var historyLength = 5
 
 // functions
 
-// retrieve location data on form/button click
 
+// write dates for forecast
+function writeDates() {
+    for (var i=0; i < forecast.children().length; i++) {
+        forecast.children().eq(i).children().eq(0).text(moment().add((24*(i+1)), 'h').format('L'))
+    }
+}
 
-
+// write icon data from forecast API
 function writeIcon(data) {
     for (var i = 0; i < forecast.children().length; i++) {
         var iconCode = data.list[7 + (i * 8)].weather[0].icon
@@ -31,18 +37,20 @@ function writeIcon(data) {
     }
 }
 
+// write temperature data from forecast API
 function writeTemp(data) {
     for (var i = 0; i < forecast.children().length; i++) {
         forecast.children().eq(i).children().eq(1).children().eq(1).text(data.list[7 + (i * 8)].main.temp.toFixed() + '°F')
     }
 }
 
+// write windspeed from forecast API 
 function writeWind(data) {
     for (var i = 0; i < forecast.children().length; i++) {
         forecast.children().eq(i).children().eq(1).children().eq(2).text(data.list[7 + (i * 8)].wind.speed + 'mph')
     }
 }
-
+// write Humidity from forecast API
 function writeHumidity(data) {
     for (var i = 0; i < forecast.children().length; i++) {
         forecast.children().eq(i).children().eq(1).children().eq(3).text(data.list[7 + (i * 8)].main.humidity + '%')
@@ -50,29 +58,30 @@ function writeHumidity(data) {
 }
 // call API with provided coordinates and write data to cards
 
-function getCoordinatesAPI() {
-    var requestURL = "http://api.openweathermap.org/geo/1.0/direct?q=greenwich&limit=1&appid=" + apiKey;
+// write recent searches to history
 
-    fetch(requestURL)
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (data) {
-            console.log(data)
-            latitude = data[0].lat;
-            console.log(latitude);
-            longitude = data[0].lon;
-            return latitude
-        })
+function saveHistory(cityName) {
+    var searchHistory= JSON.parse(localStorage.getItem("searches")) ?? [];
+    // add item to history array
+    searchHistory.unshift(cityName);
+    // remove oldest item from history array
+    searchHistory.splice(historyLength);
+    // save new array
+    localStorage.setItem("searches",JSON.stringify(searchHistory));
+
 }
 
-getCoordinatesAPI();
+// write search history to buttons
 
-console.log(latitude);
+function writeHistory() {
+    var searchHistory= JSON.parse(localStorage.getItem("searches")) ?? [];
+    for (var i=0; i < searchHistory.length; i++){
+        recentSearches.children().eq(i).replaceWith('<button type="button" id="btn'+ (i+1) + '" class="list-group-item list-group-item-action">' + searchHistory[i] + '</button>')
+    }
+}
 
-
-function getAPI(cityName) {
-    var requestURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName+ "&units=imperial&appid=" + apiKey;
+function getAPIForecast(cityName) {
+    var requestURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + "&units=imperial&appid=" + apiKey;
 
     fetch(requestURL)
         .then(function (response) {
@@ -83,28 +92,41 @@ function getAPI(cityName) {
             if (data.cod === '404') {
                 alert('Invalid City Name')
             } else {
+                writeDates();
                 writeIcon(data);
                 writeTemp(data);
                 writeWind(data);
                 writeHumidity(data);
+                saveHistory(cityName)
                 return data
             }
         })
 }
 
+function getAPICurrent(cityName){
+    var requestURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&units=imperial&appid=" + apiKey;
+    fetch(requestURL)
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function (data) {
+        console.log(data);
+    })
+}
 
 searchBtn.on('click', function () {
     console.log(locationInputEl.val());
     var cityName = locationInputEl.val();
-    getAPI(cityName);
+    getAPIForecast(cityName);
+    getAPICurrent(cityName);
+    writeHistory();
+    console.log(JSON.parse(localStorage.getItem("searches")))
 })
-
-
 
 // convert UTC unix stamp to local time??
 
 
-
+writeHistory();
 
 
 
