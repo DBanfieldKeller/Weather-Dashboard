@@ -164,6 +164,9 @@ searchBtn.on('click', function () {
 // write history to buttons on page opening
 writeHistory();
 
-recentSearches.on('click', '' )
-
-console.log(moment().format('LL'))
+// click on history button to view previous results
+recentSearches.on('click', '.history-btn', function(){
+    var cityName = $(this).text();
+    getAPIForecast(cityName);
+    getAPICurrent(cityName);
+} )
