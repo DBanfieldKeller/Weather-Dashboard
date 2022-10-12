@@ -117,6 +117,7 @@ function getAPIForecast(cityName) {
             if (data.cod === '404') {
                 alert('Invalid City Name')
             } else {
+                console.log(data)
                 writeDates();
                 writeIcon(data);
                 writeTemp(data);
